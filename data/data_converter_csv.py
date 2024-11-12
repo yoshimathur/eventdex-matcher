@@ -1,3 +1,6 @@
 import pandas as pd 
 
-df = pd.read_csv('test_seller_data.csv')
+class Data_Converter_CSV(): 
+    def __init__(self, f): 
+        self.file = f
+        self.df = pd.read_csv(f, on_bad_lines='skip')
