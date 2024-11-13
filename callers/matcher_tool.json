@@ -1,0 +1,26 @@
+{
+    "name": "find_matches", 
+    "description": "Finds relevant matches from data columns for queried subjects given the prompt. The parameters for the function are the list of columns to search from and a corresponding list of subjects to search for: THE LISTS MUST BE OF EQUAL LENGTH AND ENTRIES OF BOTH CORRESPOND BY INDEX. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.'",
+    "parameters": {
+        "type": "object", 
+        "properties": {
+            "cols": {
+                "type": "array", 
+                "items": {
+                    "type": "string"
+                }, 
+                "description": "The columns in the data relevant to the prompt. Each column in the cols array should have a corresponding subject at the same index in the subs array.", 
+                "enum":[]
+            }, 
+            "subs": {
+                "type": "array", 
+                "items": {
+                    "type": "string"
+                }, 
+                "description": "The queried subjects derived from the prompt. Each subject in the subs array should have a corresponding column at the same index in the cols array."
+            }
+        },
+        "required": ["cols", "subs"], 
+        "additionalProperties": false
+    }
+}
