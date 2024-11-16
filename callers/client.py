@@ -46,4 +46,5 @@ class OpenAI_Client():
         else: 
             tool_call = response_msg.tool_calls[0]
             args = json.loads(tool_call.function.arguments)
-            return (args['cols'], args['subs'])
+            return args
+            # return (args['cols'], args['subs'])
