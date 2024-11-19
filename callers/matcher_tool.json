@@ -1,26 +1,39 @@
 {
     "name": "find_matches", 
-    "description": "Finds relevant matches from data columns for queried subjects given the prompt. The parameters for the function are the list of columns to search from and a corresponding list of subjects to search for: THE LISTS MUST BE OF EQUAL LENGTH AND ENTRIES OF BOTH CORRESPOND BY INDEX. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.'",
+    "description": "Finds as many relevant matches as possible from data columns with queried keywords derived from the prompt. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.'",
     "parameters": {
         "type": "object", 
         "properties": {
-            "cols": {
+            "pairs": {
                 "type": "array", 
                 "items": {
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                        "col": {
+                            "type": "string", 
+                            "description": "The columns in the data relevant to the prompt.", 
+                            "enum": []
+                        }, 
+                        "keywords": {
+                            "type": "array", 
+                            "items": {
+                                "type": "string", 
+                                "description": "A keyword to query for in the associated colunn."
+                            }, 
+                            "description": "All the possible keywords to query that can be derived from the prompt. Generate at least 3 relevant keywords", 
+                            "minItems": 3
+                        }
+                    }, 
+                    "description": "A query object for the relevant column and its associated keywords.",
+                    "required": ["col", "keywords"], 
+                    "strict": true, 
+                    "additionalProperties": false
                 }, 
-                "description": "The columns in the data relevant to the prompt. Each column in the cols array should have a corresponding subject at the same index in the subs array.", 
-                "enum":[]
-            }, 
-            "subs": {
-                "type": "array", 
-                "items": {
-                    "type": "string"
-                }, 
-                "description": "The queried subjects derived from the prompt. Each subject in the subs array should have a corresponding column at the same index in the cols array."
+                "description": "A list of query objects."
             }
         },
-        "required": ["cols", "subs"], 
+        "description": "An object for the parameters of the function.",
+        "required": ["pairs"], 
         "strict": true, 
         "additionalProperties": false
     }

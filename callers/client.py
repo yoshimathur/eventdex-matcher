@@ -1,6 +1,8 @@
 import openai
 import json
 
+from callers.structured_outputs import QueryPairs
+
 # OpenAI_Client class to create an easily accessible access point to OpenAI API 
 # helps easily utilize 
 
@@ -12,22 +14,36 @@ class OpenAI_Client():
     def __init__(self):
         self.client = openai.OpenAI(api_key=self.api_key)
 
-    def createEmbeddings(self, input): 
+    def create_embeddings(self, input): 
         self.client.embeddings.create(
             model="text-embedding-3-small",
             input=input, 
             embedding_format ="float"
         )
 
-    def getParameters(self, input, data_cols): 
+    def unpack_parameters(self, pairs): 
+        cols = []
+        # keywords will be 2 dimensional
+        keywords = []
+
+        for pair in pairs['pairs']: 
+            cols.append(pair['col'])
+            keywords.append(pair['keywords'])
+
+        return (cols, keywords)
+
+    # despite strict enabled in matcher_tool openai response unstructured 
+    def get_parameters(self, input, data_cols): 
         with open('callers/matcher_tool.json') as f: 
             matcher_tool = json.load(f)
         
-        matcher_tool['parameters']['properties']['cols']['enum'] = data_cols
+        matcher_tool['parameters']['properties']['pairs']['items']['properties']['col']['enum'] = data_cols
+        # structure output 
+        struct_tool = openai.pydantic_function_tool(QueryPairs)
 
-        tools = [{"type": "function", "function": matcher_tool}]
+        tools = [{"type": "function", "function": matcher_tool}, struct_tool]
         messages = [
-            {"role": "system", "content": "You are a helpful user assistant capable of answering user questions using your knowledge and the supplied tools. Use the supplied tools more often than not."},
+            {"role": "system", "content": "You are a helpful user assistant capable of answering user questions using your knowledge and the supplied tools. Use the supplied tools as needed."},
             {"role": "user", "content": f"{input}"}
         ]
         # save messages to append to later
@@ -46,5 +62,4 @@ class OpenAI_Client():
         else: 
             tool_call = response_msg.tool_calls[0]
             args = json.loads(tool_call.function.arguments)
-            return args
-            # return (args['cols'], args['subs'])
+            return self.unpack_parameters(args)
