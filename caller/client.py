@@ -1,6 +1,5 @@
 import openai
 import json
-
 from caller.structured_outputs import QueryPairs
 
 # OpenAI_Client class to create an easily accessible access point to OpenAI API 
@@ -13,6 +12,19 @@ class OpenAI_Client():
 
     def __init__(self):
         self.client = openai.OpenAI(api_key=self.api_key)
+
+    def get_embedding(self, col) -> list: 
+        with open('caller/embedding_cache.json') as f: 
+            embedding_cache = json.load(f)
+
+        if not embedding_cache['cache']: 
+            return []
+
+        for entry in embedding_cache['cache']: 
+            if entry['col'] == col: 
+                return entry['embedding']
+        
+        return []
 
     def create_embeddings(self, input): 
         response = self.client.embeddings.create(
@@ -28,10 +40,8 @@ class OpenAI_Client():
             embedding_cache = json.load(f)
 
         entry = {
-            'entry': {
-                'col': col, 
-                'embedding': embedding
-            }
+            'col': col, 
+            'embedding': embedding
         }
 
         embedding_cache['cache'].append(entry)
@@ -80,5 +90,6 @@ class OpenAI_Client():
             return response_msg.content
         else: 
             tool_call = response_msg.tool_calls[0]
-            args = json.loads(tool_call.function.arguments)
-            return self.unpack_parameters(args)
+            pairs = json.loads(tool_call.function.arguments)
+
+            return self.unpack_parameters(pairs)

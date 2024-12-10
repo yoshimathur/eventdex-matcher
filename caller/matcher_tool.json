@@ -1,6 +1,6 @@
 {
     "name": "find_matches", 
-    "description": "Finds as many relevant matches as possible from data columns with queried keywords derived from the prompt. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.'",
+    "description": "Finds as many relevant matches as possible from data columns with a list of keywords (at minimum 3) derived from the prompt. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.'",
     "parameters": {
         "type": "object", 
         "properties": {
@@ -18,10 +18,11 @@
                             "type": "array", 
                             "items": {
                                 "type": "string", 
-                                "description": "A keyword to query for in the associated colunn."
+                                "description": "A keyword to query for in the associated colunn relevant to the prompt."
                             }, 
-                            "description": "All the possible keywords to query that can be derived from the prompt. Generate at least 3 relevant keywords", 
-                            "minItems": 3
+                            "description": "All the possible keywords to query that can be derived from the prompt. GENERATE AT LEAST 3 KEYWORDS FROM THE PROMPT.", 
+                            "minItems": 3, 
+                            "strict": true
                         }
                     }, 
                     "description": "A query object for the relevant column and its associated keywords.",
@@ -32,7 +33,6 @@
                 "description": "A list of query objects."
             }
         },
-        "description": "An object for the parameters of the function.",
         "required": ["pairs"], 
         "strict": true, 
         "additionalProperties": false
