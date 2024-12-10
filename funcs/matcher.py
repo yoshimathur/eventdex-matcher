@@ -1,11 +1,13 @@
 import pandas as pd
+import numpy as np
+import sklearn.metrics.pairwise as sci
 import openai
 
-from callers.client import OpenAI_Client
+from caller.client import OpenAI_Client
 
 class Matcher(): 
     def __init__(self, df): 
-        self.client = OpenAI_Client()
+        self.openai_client = OpenAI_Client()
         self.df = df
 
     def find_matches(self, cols, keywords) -> list[int]: 
@@ -16,14 +18,10 @@ class Matcher():
         
         for i, col in enumerate(cols): 
             data = self.df[col]
-            data = data.dropna()
+            keys = keywords[i]
+            key_str = " ".join(keys)
 
-            key = keywords[i]
+            data_embedding = data.apply(lambda x: self.client.create_embeddings(x))
+            key_embedding = self.openai_client.create_embeddings(key_str)
 
-            for i, item in enumerate(data[col].iterrows()): 
-                if str(item) in key: 
-                    print(i)
-
-
-            
-                
+            print(type(data_embedding), type(key_embedding))
