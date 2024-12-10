@@ -9,9 +9,9 @@ class Matcher():
         self.caller = OpenAI_Client()
         self.df = df
 
-    def find_matches(self, cols, keywords) -> list[int]: 
+    def find_matches(self, cols, keywords): 
         # function to find matches using relevant columns (cols) and queried subjects (subs)
-        # function returns a list of indices from the dataset of relevant matches to the query 
+        # function returns a similarity-sorted list of indices from the dataset of relevant matches to the query 
         if len(cols) != len(keywords): 
             return []
         
@@ -30,4 +30,7 @@ class Matcher():
             key_embedding = self.caller.create_embeddings(key_str)
 
             for data_embedding in data_embeddings: 
-                similarity = np.dot(key_embedding, data_embedding)
+                sim = np.dot(key_embedding, data_embedding)
+                print(sim)
+                
+
