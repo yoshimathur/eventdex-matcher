@@ -29,3 +29,6 @@ from caller.client import OpenAI_Client
 col = 'Random col'
 embedding = ['hi', 'bye', 'test']
 OpenAI_Client().save_embedding(col, embedding)
+
+with open('caller/embedding_cache.json') as f: 
+    print(json.load(f))

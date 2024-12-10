@@ -26,21 +26,18 @@ class OpenAI_Client():
         # embedding cache for data col embeddings 
         with open('caller/embedding_cache.json') as f: 
             embedding_cache = json.load(f)
-        print(embedding_cache)
-        cache = embedding_cache['cache']
 
         entry = {
-            "entry": {
-                "col": col, 
-                "embedding": embedding
+            'entry': {
+                'col': col, 
+                'embedding': embedding
             }
         }
-        entry = json.dumps(entry)
 
-        cache.push(entry)
+        embedding_cache['cache'].append(entry)
 
-        with open('caller/embedding_cache.json') as f: 
-            json.dump()
+        with open('caller/embedding_cache.json', 'w') as f: 
+            json.dump(embedding_cache, f)
 
     def unpack_parameters(self, pairs): 
         cols = []
