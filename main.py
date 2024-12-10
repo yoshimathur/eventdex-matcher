@@ -23,7 +23,9 @@ else:
     cols = parameters_completion[0]
     keywords = parameters_completion[1]
 
-    matcher.find_matches(cols, keywords)
+    matches = matcher.find_matches(cols, keywords)
+
+    print(matches)
 
 # with open('caller/embedding_cache.json') as f: 
 #     embedding_cache = json.load(f)

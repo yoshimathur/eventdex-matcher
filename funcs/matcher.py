@@ -12,6 +12,8 @@ class Matcher():
     def find_matches(self, cols, keywords): 
         # function to find matches using relevant columns (cols) and queried subjects (subs)
         # function returns a similarity-sorted list of indices from the dataset of relevant matches to the query 
+        sims = {}
+
         if len(cols) != len(keywords): 
             return []
         
@@ -29,8 +31,21 @@ class Matcher():
             
             key_embedding = self.caller.create_embeddings(key_str)
 
-            for data_embedding in data_embeddings: 
+            for i, data_embedding in enumerate(data_embeddings): 
                 sim = np.dot(key_embedding, data_embedding)
-                print(sim)
+                if sim in sims: 
+                    sims[sim].append(i)
+                else: 
+                    sims[sim] = [i]
                 
+        sims_sorted = sorted(sims.keys())
+        matches = []
+        for key in sims_sorted[::-1]: 
+            print(key, sims[key])
+            for idx in sims[key]: 
+                if idx not in matches: 
+                    matches.append(idx)
+
+        return matches
+
 
