@@ -8,7 +8,9 @@ data_center = DataCenter()
 df = data_center.from_csv('data/test_seller_data.csv')
 
 matcher = Matcher(df)
-user_prompt = "Can you return all businesses involved in construction?"
+# user_prompt = "Can you return all businesses involved in construction?"
+# user_prompt = "How can I design a website?"
+user_prompt = "Can you provide me with businesses to help develop my website?"
 
 parameters_completion = matcher.caller.get_parameters(
     input=user_prompt, 

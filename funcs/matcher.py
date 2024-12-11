@@ -19,7 +19,7 @@ class Matcher():
         
         for i, col in enumerate(cols): 
             # .head() to limit api tokens for testing purposes -> delete later 
-            data = self.df[col].head()
+            data = self.df[col].head(10)
             keys = keywords[i]
             key_str = " ".join(keys)
 

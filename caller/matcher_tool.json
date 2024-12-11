@@ -1,6 +1,6 @@
 {
     "name": "find_matches", 
-    "description": "Finds as many relevant matches as possible from data columns with a list of keywords (at minimum 3) derived from the prompt. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.'",
+    "description": "Finds as many relevant matches as possible from data columns with a list of keywords (at minimum 3) derived from the prompt. Call this function when you need to access specific event, company, or user data. For example, 'I want to know if IBM is available for a meeting at 2pm.', or 'Can you return/provide...'",
     "parameters": {
         "type": "object", 
         "properties": {
